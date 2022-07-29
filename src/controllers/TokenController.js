@@ -11,7 +11,7 @@ class TokenController {
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
 
     if (!user || !(await user.passwordIsValid(password))) {
       return res.status(400).json({
