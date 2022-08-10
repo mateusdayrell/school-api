@@ -14,7 +14,6 @@ class AlunoController {
   }
 
   async store(req, res) {
-    console.log(req.body);
     try {
       const novoAluno = await Aluno.create(req.body);
       const { id, nome, email } = novoAluno;
@@ -30,8 +29,15 @@ class AlunoController {
 
   async show(req, res) {
     try {
-      const user = await Aluno.findByPk(req.params.id);
-      const { id, nome, email } = user;
+      const aluno = await Aluno.findByPk(req.params.id);
+
+      if (!aluno) {
+        return res.status(400).json({
+          errors: ['Aluno não encontrado'],
+        });
+      }
+
+      const { id, nome, email } = aluno;
       return res.json({ id, nome, email });
     } catch (error) {
       console.log(error);
@@ -43,15 +49,15 @@ class AlunoController {
 
   async update(req, res) {
     try {
-      const user = await Aluno.findByPk(req.userId);
+      const aluno = await Aluno.findByPk(req.params.id);
 
-      if (!user) {
+      if (!aluno) {
         return res.status(400).json({
-          errors: ['Usuário não encontrado'],
+          errors: ['Aluno não encontrado'],
         });
       }
 
-      const novosDados = await user.update(req.body);
+      const novosDados = await aluno.update(req.body);
       const { id, nome, email } = novosDados;
 
       return res.json({ id, nome, email });
@@ -65,16 +71,16 @@ class AlunoController {
 
   async delete(req, res) {
     try {
-      const user = await Aluno.findByPk(req.userId);
+      const aluno = await Aluno.findByPk(req.params.id);
 
-      if (!user) {
+      if (!aluno) {
         return res.status(400).json({
-          errors: ['Usuário não encontrado'],
+          errors: ['Aluno não encontrado'],
         });
       }
 
-      await user.destroy();
-      return res.json({ message: 'Usuário deletado com sucesso' });
+      await aluno.destroy();
+      return res.json({ message: 'Aluno deletado com sucesso' });
     } catch (error) {
       console.log(error);
       return res.status(400).json({
