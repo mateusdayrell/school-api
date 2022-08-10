@@ -9,7 +9,7 @@ router.get('/', alunoController.index);
 router.get('/:id', alunoController.show);
 
 router.post('/', alunoController.store);
-router.put('/', loginRequired, alunoController.update);
-router.delete('/', loginRequired, alunoController.delete);
+router.put('/:id', loginRequired, alunoController.update);
+router.delete('/:id', loginRequired, alunoController.delete);
 
 export default router;
